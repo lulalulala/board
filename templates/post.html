@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{{ art.title }}{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+            <div class="row"></div>
+            <form action="" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ post.as_table }}
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg btn-block">
+                    发文</button>
+                <button type="reset" class="btn btn-danger btn-lg btn-block">
+                    清除</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

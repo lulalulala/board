@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/static/bootstrap/js/jquery.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <style>
+        *{font-family:微软雅黑;}
+        .col-md-8{font-weight: normal;background:#FFFFFF; margin: 0 0px 18px 0; box-shadow: 0 2px 2px 0px #FFED97}
+
+    </style>
+</head>
+<body style="background: #F5F5F5">
+    {% include "header1.html" %}
+    <div class="container">
+        <div class="row">
+            {% include "right_page.html" %}
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>

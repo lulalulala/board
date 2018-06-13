@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}留言板{% endblock %}
+{% block content %}
+
+{% for art,nick in art_name  %}
+<div class="col-md-8">
+    <article class="post">
+        <div class="post-head">
+            <h4 class="post-title">
+                <a href="/article/{{ art.id }}">{{ art.title }}</a>
+            </h4>
+            <div class="post-meta">
+                {% if nick.nickname %}
+                <span class="author">提问：{{ nick.nickname }}</span>
+                {% else %}
+                <span class="author">提问：{{ art.user }}</span>
+                {% endif %}
+                <time class="post-date" datetime="{{art.time}}" title="{{art.title}}">{{art.time}}</time>
+            </div>
+        </div>
+        <div class="post-content">
+            <p>{{ art.article }}</p>
+        </div>
+        <footer class="post-footer clearfix" style="margin:0 0 10px 0">
+            <div class="col-md-4 post-permalink">
+                <a href="/article/{{ art.id }}" target="_blank" class="btn btn-info" >
+                    阅读全文
+                </a>
+            </div>
+            <div class="pull-right tag-list">
+                <button type="button" class="btn btn-info"
+                        onclick="window.open('/article/{{ art.id }}')">
+                    回复
+                </button>
+            </div>
+        </footer>
+    </article>
+</div>
+{% endfor %}
+<div class="col-md-12">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if contacts.has_previous %}
+            <li>
+                <a href="?page={{ contacts.previous_page_number }}"
+                   aria-lable="Previous">
+                    <span aria-hidden="true">&laquo</span>
+                </a>
+            </li>
+            {% endif %}
+
+            {% for page in contacts.paginator.page_range %}
+                {% if articles.number == page %}
+                    <li class="active">
+                        <a href="?page={{page}}">{{page}}</a>
+                    </li>
+                {% else %}
+                    <li><a href="?page={{page}}">{{page}}</a> </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if contacts.has_next %}
+                <li>
+                    <a href="?page={{ contacts.next_page_number }}"
+                       aria-label="Next">
+                        <span aria-hidden="true">&raquo</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
+{% endblock %}

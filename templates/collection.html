@@ -1,0 +1,36 @@
+{% extends "base2.html" %}
+{% block title %}个人信息{% endblock %}
+{% block content %}
+
+<div class="col-md-4 pull-right" role="complementary">
+    <nav class="">
+        <ul class="nav nav-pills nav-stacked"  style="background: #FFFFFF;">
+            {% if username %}
+            {% if user.nickname %}
+            <li><a href="#">{{ user.nickname }}</a> </li>
+            {% else %}
+            <li><a href="#">用户{{ username.id }}</a> </li>
+            {% endif %}
+            <li><a href="/userinfo/{{ username.id }}">修改个人信息</a> </li>
+            <li><a href="/userinfo/{{ username.id }}/post">提问</a> </li>
+            <li class="active"><a href="/userinfo/{{ username.id }}/collection">个人收藏</a> </li>
+            <li><a href="/logout">注销</a> </li>
+            {% else %}
+            <li><a href="/login">登陆</a> </li>
+            <li><a href="/register">注册</a> </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% if collection %}
+{% for col_art in art %}
+<div class="col-md-8">
+    <div class="row" style="margin:10px 10px 10px 10px">
+        <div class="mod-head">
+            <a href="/article/{{ col_art.id }}">{{ col_art.title }}</a>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+{% endblock %}

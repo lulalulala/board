@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}{{ art.title }}{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="mod-head">
+                <h2>{{ art.title }}</h2>
+            </div>
+            <div class="mod-body">
+                <div class="content markitup-box">
+                    <h4>{{ art.article }}</h4>
+                </div>
+            </div>
+            <div class="mod-footer">
+                <div class="meta">
+                    <span class="text-color-999">{{ art.time }}</span>
+                    <div class="pull-right more-operate">
+                        {% if art_user.nickname %}
+                        <span class="text-color-999">{{ art_user.nickname }}</span>
+                        {% else %}
+                        <span class="text-color-999">用户{{ art.user.id }}</span>
+                        {% endif %}
+                        <a href="/article/{{ art.id }}/col">
+                            <button type="button" class="btn btn-info">
+                                <span class="glyphicon glyphicon-star" aria-hidden="false"></span>
+                                收藏
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if replay %}
+        {% for i,usr,id in replay_list %}
+        <div class="col-md-8">
+            <div class="mod-head">
+                {% if usr.nickname %}
+                <h4>{{ usr.nickname }} 回复:</h4>
+                {% else %}
+                <h4>用户 {{ id.id }} 回复：</h4>
+                {% endif %}
+            </div>
+            <div class="mod-body">
+                <h4>{{ i }}</h4>
+            </div>
+            <div class="mod-footer">
+                <div class="meta">
+                    <span class="text-color-999">{{ rp.time }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-md-8">
+            <div class="mod-head">
+                <h3>0回复</h3>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    {% if contacts.has_previous %}
+                    <li>
+                        <a href="?page={{ contacts.previous_page_number}}"
+                           aria-label="Previous">
+                            <span aria-hidden="true">&laquo</span>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for page in contacts.paginator.page_range %}
+                        {% if articels.number == page %}
+                            <li class="active">
+                                <a href="?page={{page}}">{{page}}</a>
+                            </li>
+                        {% else %}
+                            <li><a href="?page={{page}}">{{page}}</a> </li>
+                        {% endif %}
+                    {% endfor  %}
+
+                    {% if contacts.has_next %}
+                        <li>
+                            <a href="?page={{ contacts.next_page_number }}"
+                               aria-label="Next">
+                                <span aria-hidden="true">&raquo</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <form action="" method="POST">
+                {% csrf_token %}
+                {% for form in post %}
+                <div class="form-group">
+                    {{ form.lable_tag }}
+                    {{ form }}
+                    {{ form.erros }}
+                </div>
+                {% endfor %}
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">回复</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

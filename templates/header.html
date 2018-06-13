@@ -1,0 +1,18 @@
+<div class="container-fluid">
+    <nav class="navbar navbar-default">
+        <h1 class="col-md-2">留言板</h1>
+        <li role="presentation" class="col-md-2"> <a href="/">首页</a> </li>
+        {% if username %}
+        {% if username.nickname %}
+        <li role="presentation" class="col-md-2"><a href="/userinfo/{{ username.id }}">{{ user.nickname }}</a> </li>
+        {% else %}
+        <li role="presentation" class="col-md-2"><a href="/userinfo/{{username.id}}">用户{{ username.id }}</a> </li>
+        {% endif %}
+        <li role="presentation" class="col-md-2"><a href="userinfo/{{ username.id }}/post">提问</a> </li>
+        <li role="presentation" class="col-md-2"><a href="/logout">注销</a> </li>
+        {% else %}
+        <li role="presentation" class="col-md-2"><a href="/login">登陆</a> </li>
+        <li role="presentation" class="col-md-2"><a href="register">注册</a> </li>
+        {% endif %}
+    </nav>
+</div>
