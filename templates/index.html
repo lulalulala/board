@@ -11,11 +11,12 @@
             </h4>
             <div class="post-meta">
                 {% if nick.nickname %}
-                <span class="author">提问：{{ nick.nickname }}</span>
+                <span class="author"><strong>提问：{{ nick.nickname }}</strong></span>
                 {% else %}
-                <span class="author">提问：{{ art.user }}</span>
+                <span class="author"><strong>提问：{{ art.user }}</strong></span>
                 {% endif %}
-                <time class="post-date" datetime="{{art.time}}" title="{{art.title}}">{{art.time}}</time>
+                <time class="post-date" datetime="{{art.time}}"
+                      title="{{art.title}}">{{art.time}}</time>
             </div>
         </div>
         <div class="post-content">

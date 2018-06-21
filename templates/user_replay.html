@@ -21,6 +21,7 @@
         </ul>
     </nav>
 </div>
+
 <div class="col-md-8">
     {% for message in messages %}
     <div class="alert alert-{{ message.tags }}">{{ message }}</div>
@@ -28,21 +29,25 @@
     <ul class="nav nav-tabs">
         <li role="presentation"><a
                 href="/userinfo/{{ username.id}}">我的文章</a></li>
-        <li role="presentation"><a
-                href="/userinfo/{{ username.id}}/user_replay">我的回复</a></li>
         <li role="presentation" class="active"><a
+                href="/userinfo/{{ username.id}}/user_replay">我的回复</a></li>
+        <li role="presentation"><a
                 href="/userinfo/{{ username.id }}/collection">个人收藏</a></li>
         <li role="presentation"><a
                 href="/userinfo/{{ username.id}}/userinfo">信息修改</a></li>
     </ul>
 </div>
-{% if collection %}
-{% for col_art in art %}
+{% if replay %}
+{% for rpl,art in rpl_list %}
 <div class="col-md-8">
-    <div class="row" style="margin:10px 10px 10px 10px">
-        <div class="mod-head">
-            <h4><a href="/article/{{ col_art.id }}">{{ col_art.title }}</a></h4>
-        </div>
+    <div class="mod-head">
+        <h4><a href="/article/{{art.id}}">{{ art.title }}</a></h4>
+    </div>
+    <div class="mod-body">
+        <h5>{{ rpl.text }}</h5>
+    </div>
+    <div class="mod-foot">
+        <h5>回复于{{ rpl.time }}</h5>
     </div>
 </div>
 {% endfor %}

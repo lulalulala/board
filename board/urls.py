@@ -22,13 +22,14 @@ urlpatterns = [
     url(r'^register', views.registration),         #注册页面
     url(r'^login$', views.login),                  #登陆页面
     url(r'^logout$', views.logout),                #注销
-    url(r'^userinfo/\d+$', views.userinfo),        #用户个人信息修改页面
+    url(r'^userinfo/\d+$', views.user_article),     #用户个人信息页面
+    url(r'^userinfo/\d+/userinfo', views.userinfo), #修改个人信息
+    url(r'^userinfo/\d+/user_replay', views.user_replay), #个人回复
     url(r'^userinfo/\d+/change_psw', views.change_psw),  #更改密码
     url(r'^userinfo/\d+/post$', views.post),       #发文页面
     url(r'^article/(\d+)$',views.article),         #文章页面
     url(r'^article/(\d+)/col$', views.obj_collection),   #文章收藏
     url(r'^userinfo/\d+/collection$', views.collection),   #个人收藏页面
     url(r'^userinfo/\d+/replay$', views.user_replay),   #个人回复页面
-    #url(r'^userinfo/\+d/message$', views.message), #个人信息页面
 
 ]

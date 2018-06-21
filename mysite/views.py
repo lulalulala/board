@@ -22,7 +22,7 @@ def index(request):
         user = models.Users.objects.get(username=username)
     else:
         pass
-    articles = models.All_Article.objects.all()
+    articles = models.All_Article.objects.all().order_by("-replay_time")
     nickname = []
 
     #articles_replay = models.All_Article.objects.annotate(num_posts=Count('replay'))
@@ -234,8 +234,6 @@ def obj_collection(request, art_id):
     return redirect(url)
 
 
-
-
 #用户个人信息修改页面
 @login_required(login_url='/login/')
 def userinfo(request):
@@ -248,14 +246,16 @@ def userinfo(request):
             if post.is_valid():
                 nickname = request.POST.get('nickname')
                 message = request.POST.get('message')
-                print('111111')
+                if nickname == None:
+                    nickname = user.nickname
+                if message == None:
+                    message = user.message
                 models.Users.objects.filter(username=username).update(nickname=nickname,message=message)
-
-                messages.add_message(request, messages.INFO, '修改成功')
-            else:
-                messages.add_message(request, messages.INFO, '请填写完整')
+                messages.add_message(request, messages.SUCCESS, '修改成功')
         else:
-            post = forms.PostForm1()
+            post = forms.PostForm1(initial={'nickname':user.nickname,
+                                            'message':user.message})
+
     else:
         return redirect('/login/')
 
@@ -331,9 +331,11 @@ def collection(request):
 @login_required(login_url='/login/')
 def user_article(request):
     if request.user.is_authenticated():
-        username = request.user.username
-        user = User.objects.get(username=username)
-        articles = models.All_Article.objectes.filter(user=user)
+        userinfo = request.user.username
+        username = User.objects.get(username=userinfo)
+        user = models.Users.objects.get(username=username)
+        articles = models.All_Article.objects.filter(user=username).order_by('-time')
+        print(articles)
     else:
         return redirect('/login/')
     template = get_template('user_article.html')
@@ -348,12 +350,18 @@ def user_article(request):
 @login_required(login_url='/login/')
 def user_replay(request):
     if request.user.is_authenticated():
-        username = request.user.username
-        user = User.objects.get(username=username)
-        replay = models.Replay.objects.filter(user=user)
-        articles = models.All_Article.objects.all()
+        userinfo = request.user.username
+        username = User.objects.get(username=userinfo)
+        user = models.Users.objects.get(username=username)
+        replay = models.Replay.objects.filter(user=username).order_by('-time')
+        article = []
+        for rpl in replay:
+            art = models.All_Article.objects.get(id=rpl.all_article.id)
+            article.append(art)
+        rpl_list = list(zip(replay,article))
     else:
         return redirect('/login/')
+
     template = get_template('user_replay.html')
     request_context = RequestContext(request)
     request_context.push(locals())
