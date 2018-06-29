@@ -18,7 +18,7 @@ from mysite import views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', views.index),                        #首页
+    url(r'^$', views.index, name='index'),                        #首页
     url(r'^register', views.registration),         #注册页面
     url(r'^login$', views.login),                  #登陆页面
     url(r'^logout$', views.logout),                #注销

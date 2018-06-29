@@ -1,36 +1,36 @@
 {% extends "base.html" %}
 {% block title %}留言板{% endblock %}
 {% block content %}
-
-{% for art,nick in art_name  %}
-<div class="col-md-8">
+<main class="col-md-8">
+{% for i,nick,usrid in art_name  %}
+<div class="col-md-11">
     <article class="post">
         <div class="post-head">
             <h4 class="post-title">
-                <a href="/article/{{ art.id }}">{{ art.title }}</a>
+                <a href="/article/{{ i.id }}">{{ i.title }}</a>
             </h4>
             <div class="post-meta">
                 {% if nick.nickname %}
                 <span class="author"><strong>提问：{{ nick.nickname }}</strong></span>
                 {% else %}
-                <span class="author"><strong>提问：{{ art.user }}</strong></span>
+                <span class="author"><strong>提问：用户{{ usrid.id }}</strong></span>
                 {% endif %}
-                <time class="post-date" datetime="{{art.time}}"
-                      title="{{art.title}}">{{art.time}}</time>
+
             </div>
         </div>
         <div class="post-content">
-            <p>{{ art.article }}</p>
+            <p>{{ i.article }}</p>
         </div>
+
         <footer class="post-footer clearfix" style="margin:0 0 10px 0">
             <div class="col-md-4 post-permalink">
-                <a href="/article/{{ art.id }}" target="_blank" class="btn btn-info" >
+                <a href="/article/{{ i.id }}" target="_blank" class="btn btn-info" >
                     阅读全文
                 </a>
             </div>
             <div class="pull-right tag-list">
                 <button type="button" class="btn btn-info"
-                        onclick="window.open('/article/{{ art.id }}')">
+                        onclick="window.open('/article/{{ i.id }}')">
                     回复
                 </button>
             </div>
@@ -38,7 +38,8 @@
     </article>
 </div>
 {% endfor %}
-<div class="col-md-12">
+</main>
+<div class="col-md-7 col-md-offset-4">
     <nav aria-label="Page navigation">
         <ul class="pagination">
             {% if contacts.has_previous %}

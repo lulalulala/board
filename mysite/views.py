@@ -22,12 +22,16 @@ def index(request):
         user = models.Users.objects.get(username=username)
     else:
         pass
-    articles = models.All_Article.objects.all().order_by("-replay_time")
+    articles = models.All_Article.objects.all().order_by("-time")
     nickname = []
+    user_list = []
+    for n in articles:
+        usr_id = User.objects.get(username=n.user)
+        nick = models.Users.objects.get(username=n.user)
+        user_list.append(usr_id)
+        nickname.append(nick)
 
-    #articles_replay = models.All_Article.objects.annotate(num_posts=Count('replay'))
-
-    paginator = Paginator(articles, 5)
+    paginator = Paginator(articles, 3)
     page = request.GET.get('page')
     try:
         contacts = paginator.page(page)
@@ -35,11 +39,8 @@ def index(request):
         contacts = paginator.page(1)
     except EmptyPage:
         contacts = paginator.page(paginator.num_pages)
+    art_name = list(zip(contacts, nickname, user_list))
 
-    for n in contacts:
-        nick = models.Users.objects.get(username=n.user)
-        nickname.append(nick)
-    art_name = list(zip(articles, nickname))
 
     template = get_template('index.html')
     html = template.render(locals())
@@ -50,17 +51,17 @@ def index(request):
 #注册页面
 def registration(request):
     if request.method == 'POST':
-        print('lslsl')
         post_form = forms.LoginForm(request.POST)
         if post_form.is_valid():
             try:
                 user = User.objects.create_user(username=request.POST.get('username'), password=request.POST.get('password'))
                 users = models.Users.objects.create(username=user)
                 user.save()
+                messages.add_message(request, messages.SUCCESS, '注册成功')
             except:
                 messages.add_message(request, messages.WARNING, '该用户名已被注册')
-            print('success')
-            messages.add_message(request, messages.SUCCESS, '注册成功')
+
+
             return HttpResponseRedirect('/login')      #注册成功跳转页面
         else:
             messages.add_message(request, messages.WARNING, '请填写完整')
@@ -85,12 +86,12 @@ def login(request):
             login_name = request.POST.get('username')
             login_password = request.POST.get('password')
             user = authenticate(username=login_name, password=login_password)
-            print(user)
+
             if user is not None:
-                print('lll')
+
                 if user.is_active:
                     auth.login(request, user)
-                    print('success')
+
                     username = request.user.username
                     messages.add_message(request, messages.SUCCESS, '成功登陆')
                     return HttpResponseRedirect('/')
@@ -122,7 +123,7 @@ def logout(request):
 @login_required(login_url='/login/')
 #发文
 def post(request):                     #发文
-    print('lll')
+
     if request.user.is_authenticated():
         post_user = request.user.username
         username = User.objects.get(username=post_user)
@@ -185,9 +186,9 @@ def article(request, id):
             post_replay = models.Replay(all_article=art)
             post = forms.ReplayForm(request.POST)
             if post.is_valid():
-                print(request.POST.get('user'))
+
                 #post.save()
-                print(art.id)
+
                 rp = models.Replay(all_article=art,text=request.POST.get("text"), user=username)
                 art.replay_time=datetime.now()
                 rp.save()
@@ -230,7 +231,7 @@ def obj_collection(request, art_id):
         return redirect('/login')
 
     url = '/article/' + art_id
-    print(url)
+
     return redirect(url)
 
 
@@ -311,12 +312,15 @@ def collection(request):
         userinfo = request.user.username
         username = User.objects.get(username=userinfo)
         user = models.Users.objects.get(username=username)
-        collection = models.Collection.objects.get(user=username)
-        art = []
-        for col in collection.article.all():
-            print(col)
-            col_art = models.All_Article.objects.get(title=col)
-            art.append(col_art)
+        try:
+            collection = models.Collection.objects.get(user=username)
+            art = []
+            for col in collection.article.all():
+                print(col)
+                col_art = models.All_Article.objects.get(title=col)
+                art.append(col_art)
+        except Exception as e:
+            collection = None
     else:
         return redirect('/login/')
 
@@ -335,7 +339,7 @@ def user_article(request):
         username = User.objects.get(username=userinfo)
         user = models.Users.objects.get(username=username)
         articles = models.All_Article.objects.filter(user=username).order_by('-time')
-        print(articles)
+
     else:
         return redirect('/login/')
     template = get_template('user_article.html')

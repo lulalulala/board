@@ -1,8 +1,7 @@
 {% extends "base2.html" %}
 {% block title %}个人信息{% endblock %}
 {% block content %}
-
-<div class="col-md-4 pull-right" role="complementary">
+<aside class="col-md-4" role="complementary">
     <nav class="">
         <ul class="nav nav-pills nav-stacked"  style="background: #FFFFFF;">
             {% if username %}
@@ -20,8 +19,10 @@
             {% endif %}
         </ul>
     </nav>
-</div>
-<div class="col-md-8">
+</aside>
+
+<main class="col-md-8">
+<div>
     {% for message in messages %}
     <div class="alert alert-{{ message.tags }}">{{ message }}</div>
     {% endfor %}
@@ -38,7 +39,7 @@
 </div>
 {% if collection %}
 {% for col_art in art %}
-<div class="col-md-8">
+<div class="col-md-11">
     <div class="row" style="margin:10px 10px 10px 10px">
         <div class="mod-head">
             <h4><a href="/article/{{ col_art.id }}">{{ col_art.title }}</a></h4>
@@ -47,4 +48,5 @@
 </div>
 {% endfor %}
 {% endif %}
+</main>
 {% endblock %}
